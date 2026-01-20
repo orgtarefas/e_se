@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E SE? - Leitura do Futuro Amoroso</title>
+<style>
+  :root {
+    --primary: #FF6B8B;
+    --primary-dark: #FF3D6F;
+    --secondary: #6C63FF;
+    --light: #FFF5F7;
+    --dark: #333333;
+    --gray: #666666;
+    --success: #4CC9F0;
+    --warning: #FF9800;
+    --card-bg: rgba(255, 255, 255, 0.98);
+    --shadow: 0 10px 30px rgba(255, 107, 139, 0.2);
+    --border-radius: 25px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: linear-gradient(135deg, #FF6B8B 0%, #6C63FF 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--dark);
+  }
+
+  #app {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #app::before {
+    content: '❤️';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    font-size: 150px;
+    opacity: 0.1;
+    transform: rotate(15deg);
+    z-index: 0;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+    letter-spacing: -1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--gray);
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section {
+    animation: slideUp 0.5s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question {
+    background: linear-gradient(135deg, #FFF0F4 0%, #F8F0FF 100%);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 25px 0;
+    border: 2px solid #FFE4EC;
+    text-align: left;
+  }
+
+  .question h3 {
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .question h3 span {
+    font-size: 1.5rem;
+  }
+
+  /* Campo de entrada com botão ao lado */
+  .input-with-button {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+  }
+
+  .input-with-button input {
+    flex: 1;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 2px solid #E0E0E0;
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+
+  .input-with-button input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.1);
+  }
+
+  .input-with-button button {
+    padding: 0 25px;
+    border-radius: 12px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+  }
+
+  .input-with-button button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+
+  /* Time selector */
+  .time-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+  .time-option {
+    padding: 20px 15px;
+    border-radius: 15px;
+    border: 2px solid #E0E0E0;
+    background: white;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .time-option:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 107, 139, 0.15);
+  }
+
+  .time-option.selected {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #FFF0F4 0%, #FFE4EC 100%);
+    box-shadow: 0 5px 15px rgba(255, 107, 139, 0.2);
+  }
+
+  .time-option span {
+    font-size: 2rem;
+  }
+
+  /* Botões Sim/Não */
+  .yesno-buttons {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+  .btn-yes, .btn-no {
+    flex: 1;
+    padding: 18px 25px;
+    border-radius: 15px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+  }
+
+  .btn-yes:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+  }
+
+  .btn-no {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+  }
+
+  .btn-no:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+  }
+
+  /* Botões de idade */
+  .age-buttons {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+  .age-btn {
+    flex: 1;
+    padding: 20px 15px;
+    border-radius: 15px;
+    border: 2px solid #E0E0E0;
+    background: white;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .age-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .age-btn.novinho:hover {
+    border-color: #4CAF50;
+    background: #F1F8E9;
+  }
+
+  .age-btn.coroa:hover {
+    border-color: #FF9800;
+    background: #FFF3E0;
+  }
+
+  .age-btn.selected {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .age-btn.novinho.selected {
+    border-color: #4CAF50;
+    background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  }
+
+  .age-btn.coroa.selected {
+    border-color: #FF9800;
+    background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+  }
+
+  .age-btn span {
+    font-size: 2rem;
+  }
+
+  /* Campo de texto */
+  textarea {
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #E0E0E0;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    margin: 15px 0;
+    transition: var(--transition);
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.1);
+  }
+
+  /* Opções de tópicos */
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+  .topic-option {
+    padding: 20px 15px;
+    border-radius: 15px;
+    border: 2px solid #E0E0E0;
+    background: white;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .topic-option:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+  }
+
+  .topic-option.selected {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #FFF0F4 0%, #FFE4EC 100%);
+  }
+
+  .topic-option span {
+    font-size: 1.8rem;
+  }
+
+  /* Botão principal */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 18px 40px;
+    border-radius: 15px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 107, 139, 0.3);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Apelidos sugeridos */
+  .nickname-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+    justify-content: center;
+  }
+
+  .nickname-option {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 2px solid #E0E0E0;
+    background: white;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+  }
+
+  .nickname-option:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .nickname-option.selected {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #FFF0F4 0%, #FFE4EC 100%);
+    color: var(--primary-dark);
+  }
+
+  /* Resultado */
+  .result-card {
+    background: linear-gradient(135deg, #FFF0F4 0%, #F8F0FF 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 30px 0;
+    border: 2px solid #FFE4EC;
+    text-align: center;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 5px 20px rgba(255, 107, 139, 0.1); }
+    50% { box-shadow: 0 10px 30px rgba(255, 107, 139, 0.3); }
+    100% { box-shadow: 0 5px 20px rgba(255, 107, 139, 0.1); }
+  }
+
+  .result-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .result-title {
+    color: var(--primary-dark);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .result-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--dark);
+    margin-bottom: 20px;
+  }
+
+  .highlight {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+  }
+
+  /* Mensagens de humor */
+  .fun-message {
+    background: linear-gradient(135deg, #E3F2FD 0%, #F3E5F5 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 5px solid var(--secondary);
+    font-style: italic;
+    color: var(--dark);
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .fun-message.novinho {
+    background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+    border-left-color: #4CAF50;
+  }
+
+  .fun-message.coroa {
+    background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+    border-left-color: #FF9800;
+  }
+
+  /* Estados */
+  .hidden {
+    display: none !important;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Loading animation */
+  .loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 107, 139, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Responsividade */
+  @media (max-width: 650px) {
+    #app {
+      padding: 25px 20px;
+    }
+    
+    h1 {
+      font-size: 2.2rem;
+    }
+    
+    .time-selector,
+    .topic-grid,
+    .yesno-buttons,
+    .age-buttons {
+      grid-template-columns: 1fr;
+    }
+    
+    .time-option,
+    .topic-option,
+    .age-btn {
+      padding: 15px;
+    }
+    
+    .input-with-button {
+      flex-direction: column;
+    }
+    
+    .input-with-button button {
+      padding: 15px;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- Tela Inicial - Nick e Tempo -->
+  <div id="initial-section" class="section">
+    <h1>🔮 E SE?</h1>
+    <p class="subtitle">Descubra seu futuro amoroso com base nas suas respostas</p>
+    
+    <div class="question">
+      <h3><span>👤</span> Primeiro, me diga seu nick:</h3>
+      <div class="input-with-button">
+        <input type="text" id="nick-input" placeholder="Digite seu nick" maxlength="20">
+        <button onclick="checkNick()">OK</button>
+      </div>
+      <div id="nick-feedback" style="margin-top: 10px; min-height: 20px;"></div>
+    </div>
+
+    <div class="question" id="time-section" style="display: none;">
+      <h3><span>⏰</span> Saiba seu futuro daqui a:</h3>
+      <div class="time-selector">
+        <div class="time-option" data-time="1 hora">
+          <span>⚡</span>
+          1 HORA
+        </div>
+        <div class="time-option" data-time="1 dia">
+          <span>🌅</span>
+          1 DIA
+        </div>
+        <div class="time-option" data-time="1 semana">
+          <span>📅</span>
+          1 SEMANA
+        </div>
+        <div class="time-option" data-time="1 mês">
+          <span>🗓️</span>
+          1 MÊS
+        </div>
+        <div class="time-option" data-time="1 ano">
+          <span>📆</span>
+          1 ANO
+        </div>
+        <div class="time-option" data-time="5 anos">
+          <span>⏳</span>
+          5 ANOS
+        </div>
+      </div>
+    </div>
+    
+    <button id="start-btn" class="btn-primary" onclick="startQuestions()" style="display: none;">
+      <span>✨</span> Começar Leitura
+    </button>
+  </div>
+
+  <!-- Cadastro de novo usuário -->
+  <div id="new-user-section" class="section hidden">
+    <div class="question">
+      <h3><span>🎉</span> Nick novo!</h3>
+      <p style="margin-bottom: 15px; color: var(--gray);">
+        Deseja cadastrar "<span id="new-nick-display" style="font-weight: bold; color: var(--primary);"></span>"?
+      </p>
+      
+      <div style="margin: 20px 0;">
+        <label style="display: block; text-align: left; margin-bottom: 8px; font-weight: 600; color: var(--dark);">
+          Primeiro Nome:
+        </label>
+        <input type="text" id="first-name" placeholder="Ex: Quésia" style="width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #E0E0E0; font-size: 1rem;">
+      </div>
+
+      <div id="nickname-suggestions-container" style="display: none;">
+        <p style="margin: 15px 0 10px 0; font-weight: 600; color: var(--dark);">Escolha um apelido gerado:</p>
+        <div class="nickname-suggestions" id="nickname-suggestions"></div>
+      </div>
+
+      <div style="margin: 20px 0;">
+        <label style="display: block; text-align: left; margin-bottom: 8px; font-weight: 600; color: var(--dark);">
+          Palavra-chave (para recuperar depois):
+        </label>
+        <input type="password" id="password-input" placeholder="Escolha uma senha" style="width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #E0E0E0; font-size: 1rem;">
+      </div>
+
+      <div style="display: flex; gap: 15px; margin-top: 25px;">
+        <button class="btn-primary" onclick="registerUser()" style="flex: 1;">
+          <span>✅</span> Cadastrar
+        </button>
+        <button class="btn-no" onclick="cancelRegistration()" style="flex: 1;">
+          <span>❌</span> Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usuário existente - pedir senha -->
+  <div id="existing-user-section" class="section hidden">
+    <div class="question">
+      <h3><span>🔐</span> Olá, <span id="existing-nick" style="color: var(--primary);"></span>!</h3>
+      <p style="margin-bottom: 15px; color: var(--gray);">
+        Digite sua palavra-chave para continuar:
+      </p>
+      
+      <div class="input-with-button">
+        <input type="password" id="password-check" placeholder="Sua palavra-chave">
+        <button onclick="checkPassword()">OK</button>
+      </div>
+      
+      <div id="password-error" style="margin-top: 10px; color: #f44336; font-weight: 500; min-height: 20px;"></div>
+    </div>
+  </div>
+
+  <!-- Pergunta 1 -->
+  <div id="question1-section" class="section hidden">
+    <div class="question">
+      <h3><span>1️⃣</span> Ta ficando com alguém?</h3>
+      <div class="yesno-buttons">
+        <button class="btn-yes" onclick="answerQuestion(1, 'sim')">
+          <span>✅</span> SIM
+        </button>
+        <button class="btn-no" onclick="answerQuestion(1, 'não')">
+          <span>❌</span> NÃO
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pergunta 2 -->
+  <div id="question2-section" class="section hidden">
+    <div class="question">
+      <h3><span>2️⃣</span> Quer ficar com alguém?</h3>
+      <div class="yesno-buttons">
+        <button class="btn-yes" onclick="answerQuestion(2, 'sim')">
+          <span>✅</span> SIM
+        </button>
+        <button class="btn-no" onclick="answerQuestion(2, 'não')">
+          <span>❌</span> NÃO
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pergunta 3 -->
+  <div id="question3-section" class="section hidden">
+    <div class="question">
+      <h3><span>3️⃣</span> Ta afim de sair hoje?</h3>
+      <div class="yesno-buttons">
+        <button class="btn-yes" onclick="answerQuestion(3, 'sim')">
+          <span>✅</span> SIM
+        </button>
+        <button class="btn-no" onclick="answerQuestion(3, 'não')">
+          <span>❌</span> NÃO
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pergunta 4 -->
+  <div id="question4-section" class="section hidden">
+    <div class="question">
+      <h3><span>4️⃣</span> O que mais te atrai numa pessoa?</h3>
+      <p style="margin-bottom: 15px; color: var(--gray);">Escreva com suas palavras:</p>
+      <textarea id="attraction-text" placeholder="Ex: O senso de humor, a confiança, a inteligência, o jeito carinhoso..."></textarea>
+      <button class="btn-primary" onclick="answerQuestion(4, document.getElementById('attraction-text').value)">
+        <span>💭</span> Continuar
+      </button>
+    </div>
+  </div>
+
+  <!-- Pergunta 5 -->
+  <div id="question5-section" class="section hidden">
+    <div class="question">
+      <h3><span>5️⃣</span> Esse papo de romance te interessa?</h3>
+      <div class="yesno-buttons">
+        <button class="btn-yes" onclick="answerQuestion(5, 'sim')">
+          <span>✅</span> SIM
+        </button>
+        <button class="btn-no" onclick="answerQuestion(5, 'não')">
+          <span>❌</span> NÃO
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pergunta 6 - Nova pergunta sobre idade -->
+  <div id="question6-section" class="section hidden">
+    <div class="question">
+      <h3><span>6️⃣</span> Você gosta mais de novinho ou corôa?</h3>
+      <div class="age-buttons">
+        <button class="age-btn novinho" onclick="answerQuestion(6, 'novinho')">
+          <span>🔥</span>
+          NOVINHO
+        </button>
+        <button class="age-btn coroa" onclick="answerQuestion(6, 'coroa')">
+          <span>👑</span>
+          CORÔA
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resposta para "NOVINHO" -->
+  <div id="novinho-section" class="section hidden">
+    <div class="fun-message novinho">
+      <h3>😅 EITA MAMÃE!</h3>
+      <p>Tá na onda da energia jovem! Vamos ver o que o futuro te reserva...</p>
+    </div>
+    <button class="btn-primary" onclick="showRomanceYes()">
+      <span>🔮</span> Continuar
+    </button>
+  </div>
+
+  <!-- Resposta para "CORÔA" -->
+  <div id="coroa-section" class="section hidden">
+    <div class="fun-message coroa">
+      <h3>🍳 PANELA VELHA!</h3>
+      <p>É que faz comida boa! Sabedoria tem seu valor 😉</p>
+    </div>
+    <button class="btn-primary" onclick="showRomanceYes()">
+      <span>🔮</span> Continuar
+    </button>
+  </div>
+
+  <!-- Tópicos alternativos -->
+  <div id="topics-section" class="section hidden">
+    <div class="question">
+      <h3><span>🎯</span> Sobre o que quer falar então?</h3>
+      <p style="margin-bottom: 20px; color: var(--gray);">Escolha um tópico:</p>
+      
+      <div class="topic-grid" id="topics-grid">
+        <!-- Tópicos serão gerados dinamicamente -->
+      </div>
+      
+      <button class="btn-primary" onclick="calculateResult()" style="margin-top: 30px;">
+        <span>🔮</span> Ver Previsão
+      </button>
+    </div>
+  </div>
+
+  <!-- Resposta final para romance -->
+  <div id="romance-yes-section" class="section hidden">
+    <div class="fun-message">
+      <h3>💖 AGORA SIM!</h3>
+      <p id="greeting-message">Vamos ver como vai ser seu futuro amoroso com base nas suas respostas...</p>
+    </div>
+    <button class="btn-primary" onclick="calculateResult()">
+      <span>🔮</span> Ver Meu Futuro
+    </button>
+  </div>
+
+  <!-- Resultado -->
+  <div id="result-section" class="section hidden">
+    <div class="result-card">
+      <div class="result-icon" id="result-icon">💖</div>
+      <h2 class="result-title" id="result-title">Seu Futuro Amoroso</h2>
+      <p class="result-text">
+        Com base nas suas respostas, daqui a <span class="highlight" id="result-time">1 hora</span>:
+      </p>
+      <div id="result-details"></div>
+    </div>
+    
+    <button class="btn-primary" onclick="restartApp()">
+      <span>🔄</span> Fazer Outra Leitura
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading-section" class="section hidden">
+    <div style="padding: 50px;">
+      <div class="loading"></div>
+      <p style="margin-top: 20px; color: var(--gray); font-weight: 500;">
+        Analisando suas respostas e consultando as estrelas...
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Dados do usuário
+let userData = {
+  nick: null,
+  firstName: null,
+  selectedNickname: null,
+  password: null,
+  selectedTime: null,
+  q1: null,
+  q2: null,
+  q3: null,
+  q4: null,
+  q5: null,
+  q6: null,
+  selectedTopic: null,
+  lastVisit: null
+};
+
+// Lista de tópicos alternativos
+const topics = [
+  { icon: "💰", text: "Dinheiro e Carreira" },
+  { icon: "🎓", text: "Estudos e Aprendizado" },
+  { icon: "🏋️", text: "Saúde e Fitness" },
+  { icon: "✈️", text: "Viagens e Aventuras" },
+  { icon: "🎨", text: "Criatividade e Hobbies" },
+  { icon: "👨‍👩‍👧‍👦", text: "Família e Amigos" },
+  { icon: "🎮", text: "Games e Entretenimento" },
+  { icon: "🌍", text: "Outras coisas..." }
+];
+
+// Resultados possíveis
+const results = {
+  "ficando-quer-continuar": {
+    short: "👫 Continuará com essa pessoa!",
+    medium: "👫 O relacionamento tende a evoluir bem!",
+    long: "👫 Perspectivas muito positivas para o futuro!"
+  },
+  "ficando-nao-quer-continuar": {
+    short: "⚡ Mudanças rápidas à vista!",
+    medium: "🔄 Novos horizontes se abrindo!",
+    long: "✨ Momento de transformação pessoal!"
+  },
+  "nao-ficando-quer": {
+    short: "💘 Oportunidades surgindo!",
+    medium: "❤️ Alguém especial aparecerá!",
+    long: "💑 Encontro significativo no horizonte!"
+  },
+  "nao-ficando-nao-quer": {
+    short: "🌟 Foco em si mesmo(a)!",
+    medium: "🌱 Período de crescimento pessoal!",
+    long: "🌠 Autoconhecimento trará felicidade!"
+  }
+};
+
+// Frases de saudação baseadas no apelido
+const greetings = [
+  "E aí, {nickname}! Vamos ver como vai ser seu futuro amoroso?",
+  "Olá {nickname}! Preparado(a) para descobrir o futuro?",
+  "{nickname}, chegou a hora da verdade! Vamos lá?",
+  "Eita {nickname}, tá curioso(a) né? Vamos ver o que te espera!",
+  "{nickname}, o futuro está te esperando! Bora descobrir?"
+];
+
+// Função para gerar apelidos baseados no primeiro nome
+function generateNicknames(firstName) {
+  const name = firstName.toLowerCase().trim();
+  const nicknames = new Set();
+  
+  // Adiciona variações básicas
+  if (name.length > 2) {
+    // Primeiras 3 letras
+    nicknames.add(name.substring(0, 3));
+    
+    // Primeiras 2 letras repetidas
+    if (name.length >= 2) {
+      nicknames.add(name.substring(0, 2) + name.substring(0, 2));
+    }
+    
+    // Nome completo
+    nicknames.add(name);
+    
+    // Nome com "inho/a" no final
+    nicknames.add(name + (name.endsWith('a') ? 'inha' : 'inho'));
+    
+    // Nome com primeira letra maiúscula
+    nicknames.add(name.charAt(0).toUpperCase() + name.slice(1));
+    
+    // Nome duplicado (ex: "quéqué" para "quésia")
+    if (name.length >= 3) {
+      const firstPart = name.substring(0, Math.ceil(name.length / 2));
+      nicknames.add(firstPart + firstPart);
+    }
+    
+    // Adiciona "L" no início se começar com vogal
+    if ('aeiou'.includes(name.charAt(0))) {
+      nicknames.add('l' + name);
+    }
+    
+    // Adiciona "D" no início
+    nicknames.add('d' + name);
+    
+    // Apelidos comuns baseados em padrões
+    const commonPatterns = [
+      name + 'z',
+      name.charAt(0) + name.charAt(name.length - 1),
+      name.substring(0, Math.min(4, name.length))
+    ];
+    
+    commonPatterns.forEach(pattern => nicknames.add(pattern));
+  }
+  
+  // Converte para array e limita a 6 opções
+  return Array.from(nicknames).slice(0, 6).map(nick => 
+    nick.charAt(0).toUpperCase() + nick.slice(1)
+  );
+}
+
+// Verificar nick
+function checkNick() {
+  const nickInput = document.getElementById('nick-input');
+  const nick = nickInput.value.trim();
+  
+  if (!nick) {
+    document.getElementById('nick-feedback').innerHTML = 
+      '<span style="color: #f44336;">Por favor, digite um nick!</span>';
+    return;
+  }
+  
+  // Verificar se nick já existe
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  
+  if (users[nick]) {
+    // Usuário existente
+    userData.nick = nick;
+    document.getElementById('existing-nick').textContent = nick;
+    document.getElementById('initial-section').classList.add('hidden');
+    document.getElementById('existing-user-section').classList.remove('hidden');
+  } else {
+    // Novo usuário
+    userData.nick = nick;
+    document.getElementById('new-nick-display').textContent = nick;
+    document.getElementById('initial-section').classList.add('hidden');
+    document.getElementById('new-user-section').classList.remove('hidden');
+    
+    // Adicionar listener para gerar apelidos quando digitar o primeiro nome
+    document.getElementById('first-name').addEventListener('input', function() {
+      const firstName = this.value.trim();
+      if (firstName.length >= 2) {
+        generateAndDisplayNicknames(firstName);
+      }
+    });
+  }
+}
+
+// Gerar e mostrar apelidos
+function generateAndDisplayNicknames(firstName) {
+  const nicknames = generateNicknames(firstName);
+  const container = document.getElementById('nickname-suggestions');
+  container.innerHTML = '';
+  
+  nicknames.forEach(nickname => {
+    const div = document.createElement('div');
+    div.className = 'nickname-option';
+    div.textContent = nickname;
+    div.onclick = function() {
+      // Remover seleção anterior
+      document.querySelectorAll('.nickname-option').forEach(el => {
+        el.classList.remove('selected');
+      });
+      // Selecionar este
+      this.classList.add('selected');
+      userData.selectedNickname = nickname;
+    };
+    container.appendChild(div);
+  });
+  
+  document.getElementById('nickname-suggestions-container').style.display = 'block';
+}
+
+// Cancelar cadastro
+function cancelRegistration() {
+  document.getElementById('new-user-section').classList.add('hidden');
+  document.getElementById('initial-section').classList.remove('hidden');
+  document.getElementById('nick-input').value = '';
+  document.getElementById('nick-input').focus();
+}
+
+// Registrar novo usuário
+function registerUser() {
+  const firstName = document.getElementById('first-name').value.trim();
+  const password = document.getElementById('password-input').value.trim();
+  
+  if (!firstName) {
+    alert('Por favor, digite seu primeiro nome!');
+    return;
+  }
+  
+  if (!password) {
+    alert('Por favor, escolha uma palavra-chave!');
+    return;
+  }
+  
+  // Salvar usuário
+  userData.firstName = firstName;
+  userData.password = password;
+  userData.nickname = userData.selectedNickname || generateNicknames(firstName)[0];
+  
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  users[userData.nick] = {
+    firstName: userData.firstName,
+    nickname: userData.nickname,
+    password: userData.password,
+    created: new Date().toISOString(),
+    lastVisit: new Date().toISOString()
+  };
+  
+  localStorage.setItem('users', JSON.stringify(users));
+  localStorage.setItem('currentUser', JSON.stringify(userData));
+  
+  // Mostrar seção de tempo
+  document.getElementById('new-user-section').classList.add('hidden');
+  document.getElementById('initial-section').classList.remove('hidden');
+  document.getElementById('time-section').style.display = 'block';
+  document.getElementById('start-btn').style.display = 'inline-flex';
+  
+  // Configurar seleção de tempo
+  setupTimeSelector();
+}
+
+// Verificar senha de usuário existente
+function checkPassword() {
+  const password = document.getElementById('password-check').value.trim();
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  const user = users[userData.nick];
+  
+  if (user && user.password === password) {
+    // Senha correta
+    userData.firstName = user.firstName;
+    userData.nickname = user.nickname;
+    userData.password = user.password;
+    
+    // Atualizar última visita
+    user.lastVisit = new Date().toISOString();
+    users[userData.nick] = user;
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    
+    // Mostrar saudação personalizada
+    const greeting = greetings[Math.floor(Math.random() * greetings.length)]
+      .replace('{nickname}', userData.nickname);
+    
+    document.getElementById('existing-user-section').classList.add('hidden');
+    document.getElementById('initial-section').classList.remove('hidden');
+    document.getElementById('time-section').style.display = 'block';
+    document.getElementById('start-btn').style.display = 'inline-flex';
+    
+    // Mostrar mensagem de boas-vindas
+    document.getElementById('nick-feedback').innerHTML = 
+      `<span style="color: #4CAF50; font-weight: 600;">${greeting}</span>`;
+    
+    setupTimeSelector();
+  } else {
+    // Senha incorreta
+    document.getElementById('password-error').textContent = 
+      'Palavra-chave incorreta! Tente novamente.';
+    document.getElementById('password-check').value = '';
+    document.getElementById('password-check').focus();
+  }
+}
+
+// Configurar seleção de tempo
+function setupTimeSelector() {
+  const timeOptions = document.querySelectorAll('.time-option');
+  timeOptions.forEach(option => {
+    option.addEventListener('click', function() {
+      // Remover seleção anterior
+      timeOptions.forEach(opt => opt.classList.remove('selected'));
+      
+      // Selecionar nova opção
+      this.classList.add('selected');
+      userData.selectedTime = this.getAttribute('data-time');
+      
+      // Ativar botão
+      document.getElementById('start-btn').disabled = false;
+    });
+  });
+}
+
+// Iniciar perguntas
+function startQuestions() {
+  if (!userData.selectedTime) {
+    alert('Por favor, selecione um período de tempo!');
+    return;
+  }
+  
+  // Atualizar saudação na tela de romance
+  const greeting = greetings[Math.floor(Math.random() * greetings.length)]
+    .replace('{nickname}', userData.nickname);
+  document.getElementById('greeting-message').textContent = greeting;
+  
+  document.getElementById('initial-section').classList.add('hidden');
+  document.getElementById('question1-section').classList.remove('hidden');
+}
+
+// Responder pergunta
+function answerQuestion(questionNum, answer) {
+  userData[`q${questionNum}`] = answer;
+  
+  // Esconder pergunta atual
+  document.getElementById(`question${questionNum}-section`).classList.add('hidden');
+  
+  // Mostrar próxima pergunta ou resposta
+  if (questionNum === 5) {
+    if (answer === 'sim') {
+      document.getElementById('question6-section').classList.remove('hidden');
+    } else {
+      showTopics();
+    }
+  } else if (questionNum === 6) {
+    if (answer === 'novinho') {
+      document.getElementById('novinho-section').classList.remove('hidden');
+    } else {
+      document.getElementById('coroa-section').classList.remove('hidden');
+    }
+  } else if (questionNum < 5) {
+    document.getElementById(`question${questionNum + 1}-section`).classList.remove('hidden');
+  }
+}
+
+// Mostrar tópicos alternativos
+function showTopics() {
+  document.getElementById('question6-section').classList.add('hidden');
+  document.getElementById('topics-section').classList.remove('hidden');
+  
+  const topicsGrid = document.getElementById('topics-grid');
+  topicsGrid.innerHTML = '';
+  
+  topics.forEach((topic, index) => {
+    const topicDiv = document.createElement('div');
+    topicDiv.className = 'topic-option';
+    topicDiv.innerHTML = `
+      <span>${topic.icon}</span>
+      ${topic.text}
+    `;
+    
+    topicDiv.addEventListener('click', function() {
+      document.querySelectorAll('.topic-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      this.classList.add('selected');
+      userData.selectedTopic = topic.text;
+    });
+    
+    topicsGrid.appendChild(topicDiv);
+  });
+}
+
+// Continuar após escolha novinho/corôa
+function showRomanceYes() {
+  document.getElementById('novinho-section').classList.add('hidden');
+  document.getElementById('coroa-section').classList.add('hidden');
+  document.getElementById('romance-yes-section').classList.remove('hidden');
+}
+
+// Calcular resultado
+function calculateResult() {
+  // Salvar dados do usuário
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  if (users[userData.nick]) {
+    users[userData.nick].lastVisit = new Date().toISOString();
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  
+  localStorage.setItem('currentUser', JSON.stringify(userData));
+  
+  // Mostrar loading
+  document.getElementById('topics-section').classList.add('hidden');
+  document.getElementById('romance-yes-section').classList.add('hidden');
+  document.getElementById('loading-section').classList.remove('hidden');
+  
+  setTimeout(() => {
+    document.getElementById('loading-section').classList.add('hidden');
+    showResult();
+  }, 2000);
+}
+
+// Mostrar resultado
+function showResult() {
+  const resultSection = document.getElementById('result-section');
+  const resultTime = document.getElementById('result-time');
+  const resultIcon = document.getElementById('result-icon');
+  const resultTitle = document.getElementById('result-title');
+  const resultDetails = document.getElementById('result-details');
+  
+  resultTime.textContent = userData.selectedTime;
+  
+  let resultKey = '';
+  if (userData.q1 === 'sim' && userData.q2 === 'sim') {
+    resultKey = 'ficando-quer-continuar';
+    resultIcon.textContent = '💑';
+    resultTitle.textContent = 'Relacionamento em Ascensão!';
+  } 
+  else if (userData.q1 === 'sim' && userData.q2 === 'não') {
+    resultKey = 'ficando-nao-quer-continuar';
+    resultIcon.textContent = '🔄';
+    resultTitle.textContent = 'Tempo de Mudanças!';
+  }
+  else if (userData.q1 === 'não' && userData.q2 === 'sim') {
+    resultKey = 'nao-ficando-quer';
+    resultIcon.textContent = '💘';
+    resultTitle.textContent = 'Oportunidades Chegando!';
+  }
+  else {
+    resultKey = 'nao-ficando-nao-quer';
+    resultIcon.textContent = '🌟';
+    resultTitle.textContent = 'Foco em Você!';
+  }
+  
+  let resultText = '';
+  const time = userData.selectedTime;
+  
+  if (time === '1 hora' || time === '1 dia') {
+    resultText = results[resultKey].short;
+  } 
+  else if (time === '1 semana' || time === '1 mês') {
+    resultText = results[resultKey].medium;
+  }
+  else {
+    resultText = results[resultKey].long;
+  }
+  
+  let detailsHTML = `
+    <p style="font-size: 1.3rem; font-weight: 600; margin: 20px 0; color: var(--primary-dark);">
+      ${resultText}
+    </p>
+  `;
+  
+  if (userData.q3 === 'sim') {
+    detailsHTML += `
+      <p>✅ <strong>Sair hoje pode trazer:</strong> ${getOutcomeBasedOnTime(time, 'positive')}</p>
+    `;
+  } else {
+    detailsHTML += `
+      <p>🏠 <strong>Ficar em casa pode:</strong> ${getOutcomeBasedOnTime(time, 'neutral')}</p>
+    `;
+  }
+  
+  if (userData.q4 && userData.q4.trim() !== '') {
+    detailsHTML += `
+      <p>💖 <strong>Seu critério "${userData.q4.substring(0, 30)}..."</strong> será importante!</p>
+    `;
+  }
+  
+  if (userData.q6) {
+    const ageEmoji = userData.q6 === 'novinho' ? '🔥' : '👑';
+    const ageMessage = userData.q6 === 'novinho' 
+      ? 'energia jovem atrairá pessoas dinâmicas!' 
+      : 'experiência atrairá pessoas maduras e interessantes!';
+    
+    detailsHTML += `
+      <p>${ageEmoji} <strong>Preferência por ${userData.q6}:</strong> Sua ${ageMessage}</p>
+    `;
+  }
+  
+  if (userData.q5 === 'não' && userData.selectedTopic) {
+    detailsHTML += `
+      <p>🎯 <strong>Sobre ${userData.selectedTopic}:</strong> ${getTopicPrediction(userData.selectedTopic, time)}</p>
+    `;
+  }
+  
+  // Saudação personalizada com apelido
+  const nickname = userData.nickname || userData.nick;
+  detailsHTML += `
+    <div style="background: white; padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 4px solid var(--secondary);">
+      <p style="color: var(--dark); font-style: italic;">
+        💡 ${nickname}, ${getFinalTip(resultKey, time, userData.q6)}
+      </p>
+    </div>
+  `;
+  
+  resultDetails.innerHTML = detailsHTML;
+  resultSection.classList.remove('hidden');
+}
+
+// Funções auxiliares
+function getOutcomeBasedOnTime(time, type) {
+  const outcomes = {
+    '1 hora': type === 'positive' ? 'um encontro casual interessante' : 'descanso revigorante',
+    '1 dia': type === 'positive' ? 'novas conexões significativas' : 'reflexão produtiva',
+    '1 semana': type === 'positive' ? 'desenvolvimento de novas amizades' : 'planejamento eficaz',
+    '1 mês': type === 'positive' ? 'oportunidades sociais valiosas' : 'progresso em projetos pessoais',
+    '1 ano': type === 'positive' ? 'rede de contatos duradoura' : 'conquistas significativas',
+    '5 anos': type === 'positive' ? 'relacionamentos sólidos construídos' : 'base estabelecida para sucesso'
+  };
+  return outcomes[time] || 'resultados positivos';
+}
+
+function getTopicPrediction(topic, time) {
+  const predictions = {
+    'Dinheiro e Carreira': `progresso ${time === '1 hora' ? 'imediato' : 'significante'}`,
+    'Estudos e Aprendizado': `novos conhecimentos ${time === '1 ano' ? 'transformadores' : 'úteis'}`,
+    'Saúde e Fitness': `${time === '1 dia' ? 'melhora rápida' : 'benefícios duradouros'}`,
+    'Viagens e Aventuras': `${time === '1 semana' ? 'pequenas escapadas' : 'grandes experiências'}`,
+    'Criatividade e Hobbies': `inspiração ${time === '1 hora' ? 'instantânea' : 'crescente'}`,
+    'Família e Amigos': `momentos ${time === '1 dia' ? 'especiais' : 'memoráveis'}`,
+    'Games e Entretenimento': `diversão ${time === '1 semana' ? 'garantida' : 'constante'}`,
+    'Outras coisas...': `surpresas ${time === '1 mês' ? 'interessantes' : 'positivas'}`
+  };
+  return predictions[topic] || 'desenvolvimento positivo';
+}
+
+function getFinalTip(resultKey, time, agePreference) {
+  let baseTip = '';
+  const tips = {
+    'ficando-quer-continuar': `Invista em comunicação aberta - ${time === '1 ano' ? 'é fundamental para relações duradouras' : 'fortalece laços'}`,
+    'ficando-nao-quer-continuar': `Honre seus sentimentos - ${time === '5 anos' ? 'você agradecerá por ser verdadeiro consigo mesmo' : 'autenticidade é libertadora'}`,
+    'nao-ficando-quer': `Esteja aberto(a) - ${time === '1 mês' ? 'oportunidades aparecem quando menos esperamos' : 'a vida surpreende'}`,
+    'nao-ficando-nao-quer': `O autocuidado é prioridade - ${time === '1 semana' ? 'pequenos rituais fazem diferença' : 'sua evolução pessoal é sua maior conquista'}`
+  };
+  
+  baseTip = tips[resultKey] || 'Confie no seu processo e aproveite a jornada!';
+  
+  if (agePreference) {
+    const ageTip = agePreference === 'novinho' 
+      ? ' A energia jovem mantém o coração leve!'
+      : ' A experiência traz profundidade aos relacionamentos!';
+    baseTip += ageTip;
+  }
+  
+  return baseTip;
+}
+
+// Reiniciar aplicativo
+function restartApp() {
+  userData = {
+    nick: null,
+    firstName: null,
+    selectedNickname: null,
+    password: null,
+    selectedTime: null,
+    q1: null,
+    q2: null,
+    q3: null,
+    q4: null,
+    q5: null,
+    q6: null,
+    selectedTopic: null,
+    lastVisit: null
+  };
+  
+  document.querySelectorAll('.time-option, .topic-option, .age-btn, .nickname-option').forEach(el => {
+    el.classList.remove('selected');
+  });
+  
+  document.getElementById('nick-input').value = '';
+  document.getElementById('first-name').value = '';
+  document.getElementById('password-input').value = '';
+  document.getElementById('password-check').value = '';
+  document.getElementById('attraction-text').value = '';
+  
+  document.getElementById('result-section').classList.add('hidden');
+  document.getElementById('initial-section').classList.remove('hidden');
+  document.getElementById('time-section').style.display = 'none';
+  document.getElementById('start-btn').style.display = 'none';
+  document.getElementById('nick-feedback').innerHTML = '';
+  
+  document.getElementById('nick-input').focus();
+}
+
+// Permitir Enter no campo de nick
+document.getElementById('nick-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    checkNick();
+  }
+});
+
+// Permitir Enter no campo de senha
+document.getElementById('password-check').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    checkPassword();
+  }
+});
+
+// Verificar se há usuário atual
+document.addEventListener('DOMContentLoaded', function() {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (currentUser) {
+    document.getElementById('nick-input').value = currentUser.nick || '';
+  }
+});
+</script>
+</body>
+</html>
